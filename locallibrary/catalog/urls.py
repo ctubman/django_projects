@@ -26,7 +26,10 @@ if settings.DEBUG:
         }),
     ]
 
-
 urlpatterns += [
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+]
+
+urlpatterns += [
+    path('borrowed/', views.LoanedBooksListView.as_view(), name='all-borrowed'),
 ]
