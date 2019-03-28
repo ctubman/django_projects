@@ -25,7 +25,7 @@ APP_NAME = 'CarringtonAdlist'   # Add
 SECRET_KEY = 'qi5a_=+!^w#5)34%ps9*v@lw0)qibz+309iyr0$t3r7oti0#2g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
