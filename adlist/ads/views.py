@@ -11,11 +11,11 @@ from ads.forms import CreateForm, CommentForm
 
 
 class ThingListView(OwnerListView):
-    model = Thing
+    model = Ad
     template_name = "ad_list.html"
 
     def get(self, request) :
-        thing_list = Thing.objects.all()
+        thing_list = Ad.objects.all()
         favorites = list()
         if request.user.is_authenticated:
             # rows = [{'id': 2}]  (A list of rows)
@@ -23,6 +23,30 @@ class ThingListView(OwnerListView):
             favorites = [ row['id'] for row in rows ]
         ctx = {'thing_list' : thing_list, 'ads': ads}
         return render(request, self.template_name, ctx)
+
+#@method_decorator(csrf_exempt, name='dispatch')
+class AddFavoriteView(LoginRequiredMixin, View):
+    def post(self, request, pk) :
+        print("Add PK",pk)
+        t = get_object_or_404(Ad, id=pk)
+        fav = Fav(user=request.user, thing=t)
+        try:
+            fav.save()  # In case of duplicate key
+        except IntegrityError as e:
+            pass
+        return HttpResponse()
+
+#@method_decorator(csrf_exempt, name='dispatch')
+class DeleteFavoriteView(LoginRequiredMixin, View):
+    def post(self, request, pk) :
+        print("Delete PK",pk)
+        t = get_object_or_404(Ad, id=pk)
+        try:
+            fav = Fav.objects.get(user=request.user, thing=t).delete()
+        except Fav.DoesNotExist as e:
+            pass
+
+        return HttpResponse()
 
 
 class AdListView(OwnerListView):
